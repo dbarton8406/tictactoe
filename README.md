@@ -1,1 +1,1 @@
-# tictactoe
+# My TicTacToe game.

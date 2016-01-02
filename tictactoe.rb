@@ -34,7 +34,7 @@ sleep 0.05; $stdout.flush }
 sleep 0.05; $stdout.flush }
 def tictactoe
   turn_count = 9
-  board = (0..10).to_a
+  board = (0..9).to_a
   # player1
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
   puts "================================================================================"
@@ -131,7 +131,7 @@ def prompt_player(board)
   puts "Please choose a open square:".green.bold
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   choice = gets.chomp
-  until valid_number?(choice.to_i)
+  until valid_number?(choice.to_i) || already_guessed?(board,choice.to_i)
     puts "#{choice} is not a valid option.
 Please choose again: "
     choice = gets.chomp
@@ -150,9 +150,9 @@ end
 def already_guessed?(board,choice)
   # choice = choice.split ""
   if board[choice]=="X" || board[choice]=="O"
-    puts "#{choice} is not a valid option.
-Please choose again: "
-    choice = gets.chomp
+#     puts "#{choice} is not a valid option.
+# Please choose again: "
+#     choice = gets.chomp
   end
 end
 def postmortem( guesses, board)

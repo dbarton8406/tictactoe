@@ -131,7 +131,7 @@ def prompt_player(board)
   puts "Please choose a open square:".green.bold
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   choice = gets.chomp
-  until valid_number?(choice.to_i) || already_guessed?(board,choice.to_i)
+  until valid_number?(choice.to_i) && !already_guessed?(board,choice.to_i)
     puts "#{choice} is not a valid option.
 Please choose again: "
     choice = gets.chomp
@@ -149,11 +149,10 @@ end
 #This peice is still not fuctional and working on.
 def already_guessed?(board,choice)
   # choice = choice.split ""
-  if board[choice]=="X" || board[choice]=="O"
+  board[choice]=="X" || board[choice]=="O"
 #     puts "#{choice} is not a valid option.
 # Please choose again: "
 #     choice = gets.chomp
-  end
 end
 def postmortem( guesses, board)
   if win?(guesses)

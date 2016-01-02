@@ -1,8 +1,17 @@
 require "pry"
 require "set"
-$win_set =Set.new([Set.new([0,1,2]),Set.new([3,4,5]),
-                   Set.new([6,7,8]),Set.new([0,3,6]),Set.new([1,4,7]),
-                   Set.new([2,7,8]),Set.new([0,4,8]),Set.new([2,4,6])])
+require "colorize"
+require 'progress_bar'
+bar = ProgressBar.new
+
+100.times do
+  sleep 0.05
+  bar.increment!
+end
+
+$win_set =Set.new([Set.new([1,4,7]),Set.new([2,5,8]),
+                   Set.new([3,6,9]),Set.new([1,2,3]),Set.new([4,5,6]),
+                   Set.new([7,8,9]),Set.new([1,5,9]),Set.new([3,5,7])])
 def play
   play_tictactoe
   choice = play_again?
@@ -13,7 +22,7 @@ def play
 end
 def play_again?
   puts "Would you like to play again? (y/n)"
-  gets.chomp
+  choice = gets.chomp
 end
 def play_tictactoe
   tictactoe
@@ -21,23 +30,23 @@ end
 "Is it a game... or is it real?\n\n".each_char {|c| putc c ;
 sleep 0.05; $stdout.flush }
 "What you see on these screens up here is a fantasy;
-a computer enhanced hallucination!\n\n".each_char {|c| putc c ;
+  a computer enhanced hallucination!\n\n".each_char {|c| putc c ;
 sleep 0.05; $stdout.flush }
 def tictactoe
   turn_count = 9
-  board = (0..8).to_a
-  # player1 
+  board = (0..10).to_a
+  # player1
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
   puts "================================================================================"
-  puts"Please type your first name."
+  puts"Please type your first name.".blue.bold
   puts "================================================================================"
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
   player1 = gets.chomp
 
-  # player2 
+  # player2
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
   puts "================================================================================"
-  puts"Please type your first name."
+  puts"Please type your first name.".red.bold
   puts "================================================================================"
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
   player2 = gets.chomp
@@ -56,7 +65,7 @@ def tictactoe
     if current_player == player1
       board[guess] = "X"
       if win?(guesses)
-        puts "#{player1} wins!\n\n"
+        puts "#{player1} wins!\n\n".blue.blink
         puts "===================="
       else
         current_player = player2
@@ -66,7 +75,7 @@ def tictactoe
       current_player = player1
       board[guess] = "O"
       if win?(guesses)
-        puts "#{player2} wins!\n\n"
+        puts "#{player2} wins!\n\n".red.blink
         puts "===================="
       else
         guesses =g1
@@ -109,19 +118,20 @@ def take_turn(guesses, board)
 end
 def show_board(board)
   puts "
-#{board[0]} | #{board[1]} | #{board[2]}
+#{board[1]} | #{board[2]} | #{board[3]}
 --- --- ---
-#{board[3]} | #{board[4]} | #{board[5]}
+#{board[4]} | #{board[5]} | #{board[6]}
 --- --- ---
-#{board[6]} | #{board[7]} | #{board[8]}
+#{board[7]} | #{board[8]} | #{board[9]}
 \n\n"
 end
 def prompt_player(board)
+
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-  puts "Please choose a open square:"
+  puts "Please choose a open square:".green.bold
   puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   choice = gets.chomp
-  until valid_number?(choice.to_i) || !already_guessed?(board,choice>to_i)
+  until valid_number?(choice.to_i)
     puts "#{choice} is not a valid option.
 Please choose again: "
     choice = gets.chomp
@@ -129,14 +139,21 @@ Please choose again: "
   choice.to_i
 end
 def valid_number?(choice)
-  if choice >= 0 and choice <= 8
+  if choice >= 1 && choice <= 9
     true
   else
     false
   end
 end
+
+#This peice is still not fuctional and working on.
 def already_guessed?(board,choice)
-  board[choice] == "X" || board[choice] == "O"
+  # choice = choice.split ""
+  if board[choice]=="X" || board[choice]=="O"
+    puts "#{choice} is not a valid option.
+Please choose again: "
+    choice = gets.chomp
+  end
 end
 def postmortem( guesses, board)
   if win?(guesses)
@@ -148,17 +165,13 @@ def postmortem( guesses, board)
     sleep 1
     "To win the game.\n".each_char {|c| putc c
     sleep 0.05; $stdout.flush }
-    sleep 1
-    puts "congrats you win!"
   else
     "==========="
-    puts "Tie"
+    puts "Tie".green.blink
     "===========\n\n"
     "Greetings, Professor Falken\n".each_char {|c| putc c
     sleep 0.05; $stdout.flush }
     sleep 1
-    "Hello,Joshua.\n".each_char {|c| putc c
-    sleep 0.25; $stdout.flush }
     " A strange game.\n".each_char {|c| putc c
     sleep 0.05; $stdout.flush }
     "The only winning move is not to play.\n".each_char {|c| putc c
